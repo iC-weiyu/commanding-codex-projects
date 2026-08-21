@@ -1,0 +1,7 @@
+interface:
+  display_name: "Codex 项目总指挥"
+  short_description: "统筹命名 Codex 子对话、监听纠偏并统一验收"
+  default_prompt: "请使用 $commanding-codex-projects 担任这个项目的总指挥，统一调度后续子对话。"
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,28 @@
+name: commanding-codex-projects
+version: 0.1.0
+description: >
+  Declarative router for the commander startup gate and child-task dispatch
+  configuration. Operational detail remains in the on-demand contract.
+
+always_load:
+  - static/core/contract.md
+
+axes:
+  dispatch_config:
+    detect: |
+      BLOCKING GATE. On the first assistant response after this Skill is
+      activated, ask exactly this one sentence and stop:
+      "是否调整子对话强度（默认 Luna/中），以及创建子对话是否需要逐个确认（默认不确认）？"
+      Do not acknowledge the project, call tools, explain defaults, or add a
+      second sentence. The initial invocation message is not the answer to the
+      gate, even when it already mentions default or custom settings. Parse
+      only the user's next message as the configuration answer.
+    values:
+      default: static/fragments/dispatch/default.md
+      custom: static/fragments/dispatch/custom.md
+    multi: false
+
+references:
+  on_demand:
+    - condition: after dispatch_config is resolved, before any thread is inherited, created, monitored, corrected, or accepted
+      path: references/operating-contract.md
