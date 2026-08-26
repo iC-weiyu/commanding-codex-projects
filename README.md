@@ -98,6 +98,22 @@ git clone https://github.com/iC-weiyu/commanding-codex-projects.git "$env:USERPR
 
 完整工作流依赖 Codex 桌面端提供的项目与任务管理能力，例如发现项目、列出／读取任务、创建任务、发送消息、设置标题和等待任务。若关键能力不可用，Skill 会报告阻塞，不会用总指挥内部 subagent 冒充可见子任务体系。
 
+### 免确认调度（可选）
+
+新版 Codex 通过内置的 `codex-app-tools@openai-bundled` MCP 插件提供创建任务和向任务发送消息的能力。该插件默认会为 `create_thread` 与 `send_message_to_thread` 请求逐次批准；这会中断需要长期监听和连续调度的总指挥工作流。
+
+如果你信任总指挥在当前任务授权范围内自主创建和调度可见任务，可在用户级 `~/.codex/config.toml`（Windows 通常为 `%USERPROFILE%\.codex\config.toml`）加入：
+
+```toml
+[plugins."codex-app-tools@openai-bundled".mcp_servers.codex_app.tools.create_thread]
+approval_mode = "approve"
+
+[plugins."codex-app-tools@openai-bundled".mcp_servers.codex_app.tools.send_message_to_thread]
+approval_mode = "approve"
+```
+
+这只预先批准创建任务和发送消息；`fork_thread`、`handoff_thread`、自动化管理等其他写操作仍沿用 Codex 内置审批策略。修改后请完全重启 Codex，并从新任务启动总指挥。Skill 本身不会修改用户权限配置。
+
 ## 仓库结构
 
 ```text
